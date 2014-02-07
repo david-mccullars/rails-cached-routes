@@ -1,20 +1,23 @@
 module CachedRoutes
   class Marshaller
 
-    attr_reader :cached_file
+    attr_reader :routes_file, :cached_file
 
     def initialize
-      @cached_file = begin
-        if caller_line = caller.detect { |li| !(li =~ /cached_routes/i) }
-          caller_line.sub(/\.rb:.*/, '.cached')
-        else
-          Rails.root.join('config/routes.cached')
-        end
+      if caller_line = caller.detect { |li| !(li =~ /cached_routes/i) }
+        @routes_file = caller_line.sub /:.*/, ''
+        @cached_file = caller_line.sub /\.rb:.*/, '.cached'
+      else
+        warn "Can not determine caller routes file.  Skipping route caching."
       end
     end
 
     def can_unmarshal_routes?
-      File.exist?(cached_file) && File.mtime(cached_file) >= File.mtime(__FILE__)
+      routes_file &&
+      cached_file &&
+      File.exist?(routes_file) &&
+      File.exist?(cached_file) &&
+      File.mtime(cached_file) >= File.mtime(routes_file)
     end
 
     def marshal_routes(new_routes)
