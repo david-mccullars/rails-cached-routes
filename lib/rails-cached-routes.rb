@@ -1,15 +1,5 @@
 require 'active_support'
 
-p "IN RAILS CACHED ROUTES"
-module CachedRoutes
-
-  extend ActiveSupport::Autoload
-
-  autoload :Marshaller
-  autoload :RouteSet
-
-  eager_autoload do
-    autoload :Railtie
-  end
-
+Dir[File.expand_path('../cached_routes/**/*.rb', __FILE__)].each do |file|
+  load file
 end

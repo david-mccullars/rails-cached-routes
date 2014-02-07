@@ -1,4 +1,3 @@
-p "IN RCR RouteSet"
 module CachedRoutes
   module RouteSet
 

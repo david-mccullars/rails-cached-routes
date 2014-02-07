@@ -1,4 +1,3 @@
-p "INSIDE RCR Railtie"
 module CachedRoutes
   class Railtie < Rails::Railtie
 
